@@ -59,7 +59,7 @@ app.use(errorHandler);
 
 // ─── Start server ─────────────────────────────────────────────────────────────
 const PORT = process.env.PORT || 5050;
-const server = app.listen(PORT, () => {
+const server = app.listen(PORT, '0.0.0.0', () => {
   const url = `http://localhost:${PORT}`;
   console.log(`\x1b[32m✓ UNIVIBE running at: ${url}\x1b[0m`);
   console.log(`  API  → ${url}/api`);
