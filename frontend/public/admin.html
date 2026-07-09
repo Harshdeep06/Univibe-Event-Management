@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UNIVIBE - Super Admin Panel</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <link rel="stylesheet" href="/css/styles.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              primary: "#3D56B2",
+              secondary: "#5C7AEA",
+              bgCanvas: "#F4F6F9",
+              card: "#FFFFFF",
+              textMain: "#1A1A1A",
+              textMuted: "#757575",
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#F4F6F9] dark:bg-[#111827] min-h-screen text-[#1A1A1A] dark:text-gray-100 transition-colors">
+  
+  <div class="min-h-screen flex flex-col md:flex-row">
+    
+    
+    <div id="sidebar-container"></div>
+
+    
+    <main class="flex-1 flex flex-col p-4 md:p-8 overflow-y-auto">
+      
+      
+      <div id="navbar-container"></div>
+
+      
+      <div id="admin-loader" class="flex items-center justify-center py-12">
+        <div class="w-8 h-8 border-4 border-[#3D56B2] border-t-transparent rounded-full animate-spin"></div>
+      </div>
+
+      
+      <div id="admin-content" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        
+        <div class="lg:col-span-2 space-y-6">
+          
+          
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div class="bg-white dark:bg-gray-800 p-4 rounded-[16px] shadow-sm border border-gray-100 dark:border-gray-700">
+              <div class="w-8 h-8 rounded-lg flex items-center justify-center mb-3 text-blue-500 bg-blue-50 dark:bg-gray-700">
+                <i data-lucide="users-2" class="w-4 h-4"></i>
+              </div>
+              <h3 id="stat-students-count" class="text-2xl font-extrabold text-[#1A1A1A] dark:text-white leading-none">0</h3>
+              <p class="text-[10px] text-[#757575] dark:text-gray-400 font-semibold tracking-wider uppercase mt-2">Students</p>
+            </div>
+            
+            <div class="bg-white dark:bg-gray-800 p-4 rounded-[16px] shadow-sm border border-gray-100 dark:border-gray-700">
+              <div class="w-8 h-8 rounded-lg flex items-center justify-center mb-3 text-purple-500 bg-purple-50 dark:bg-gray-700">
+                <i data-lucide="layers" class="w-4 h-4"></i>
+              </div>
+              <h3 id="stat-clubs-count" class="text-2xl font-extrabold text-[#1A1A1A] dark:text-white leading-none">0</h3>
+              <p class="text-[10px] text-[#757575] dark:text-gray-400 font-semibold tracking-wider uppercase mt-2">Clubs</p>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 p-4 rounded-[16px] shadow-sm border border-gray-100 dark:border-gray-700">
+              <div class="w-8 h-8 rounded-lg flex items-center justify-center mb-3 text-green-500 bg-green-50 dark:bg-gray-700">
+                <i data-lucide="calendar" class="w-4 h-4"></i>
+              </div>
+              <h3 id="stat-events-count" class="text-2xl font-extrabold text-[#1A1A1A] dark:text-white leading-none">0</h3>
+              <p class="text-[10px] text-[#757575] dark:text-gray-400 font-semibold tracking-wider uppercase mt-2">Live Events</p>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 p-4 rounded-[16px] shadow-sm border border-gray-100 dark:border-gray-700">
+              <div class="w-8 h-8 rounded-lg flex items-center justify-center mb-3 text-yellow-500 bg-yellow-50 dark:bg-gray-700">
+                <i data-lucide="check-circle" class="w-4 h-4"></i>
+              </div>
+              <h3 id="stat-regs-count" class="text-2xl font-extrabold text-[#1A1A1A] dark:text-white leading-none">0</h3>
+              <p class="text-[10px] text-[#757575] dark:text-gray-400 font-semibold tracking-wider uppercase mt-2">Registrations</p>
+            </div>
+          </div>
+
+          
+          <div class="bg-white dark:bg-gray-800 p-6 rounded-[24px] border border-gray-100 dark:border-gray-700 shadow-sm">
+            <h3 class="text-sm font-bold text-[#1A1A1A] dark:text-white mb-4">Registration Analytics (Yearly Growth)</h3>
+            <div class="h-64 relative">
+              <canvas id="admin-chart-canvas"></canvas>
+            </div>
+          </div>
+
+          
+          <div id="approvals-section" class="bg-white dark:bg-gray-800 p-6 rounded-[24px] border border-gray-100 dark:border-gray-700 shadow-sm space-y-4">
+            <h3 class="text-sm font-bold text-[#1A1A1A] dark:text-white flex items-center gap-1.5">
+              <i data-lucide="shield-alert" class="text-[#3D56B2] w-4.5 h-4.5"></i>
+              Review Pending Event Proposals (<span id="approvals-badge-count">0</span>)
+            </h3>
+            <div id="pending-events-list" class="divide-y divide-gray-100 dark:divide-gray-700 text-xs"></div>
+            <div id="pending-events-empty" class="hidden text-center py-2 text-xs text-[#757575] dark:text-gray-400 italic">All proposals resolved.</div>
+          </div>
+
+          
+          <div id="clubs-section" class="bg-white dark:bg-gray-800 p-6 rounded-[24px] border border-gray-100 dark:border-gray-700 shadow-sm space-y-4">
+            <h3 class="text-sm font-bold text-[#1A1A1A] dark:text-white flex items-center gap-1.5">
+              <i data-lucide="layers" class="text-[#3D56B2] w-4.5 h-4.5"></i>
+              University Clubs Registry
+            </h3>
+            <div class="overflow-x-auto text-xs">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="border-b border-gray-100 dark:border-gray-700 text-[#757575] dark:text-gray-400 font-semibold">
+                    <th class="pb-3 pr-4">Logo</th>
+                    <th class="pb-3 pr-4">Club Name</th>
+                    <th class="pb-3 pr-4">Faculty Coordinator</th>
+                    <th class="pb-3 pr-4 text-center">Members Count</th>
+                    <th class="pb-3 text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="clubs-list-body" class="divide-y divide-gray-50 dark:divide-gray-700"></tbody>
+              </table>
+            </div>
+          </div>
+
+          
+          <div id="students-section" class="bg-white dark:bg-gray-800 p-6 rounded-[24px] border border-gray-100 dark:border-gray-700 shadow-sm space-y-4">
+            <h3 class="text-sm font-bold text-[#1A1A1A] dark:text-white flex items-center gap-1.5">
+              <i data-lucide="folder-lock" class="text-[#3D56B2] w-4.5 h-4.5"></i>
+              Student Directory Registry
+            </h3>
+            <div class="overflow-x-auto text-xs">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="border-b border-gray-100 dark:border-gray-700 text-[#757575] dark:text-gray-400 font-semibold">
+                    <th class="pb-3 pr-4">Name</th>
+                    <th class="pb-3 pr-4">Roll No</th>
+                    <th class="pb-3 pr-4">Branch</th>
+                    <th class="pb-3 pr-4 text-center">Year</th>
+                    <th class="pb-3 pr-4 text-center">Reward Points</th>
+                    <th class="pb-3 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="students-list-body" class="divide-y divide-gray-50 dark:divide-gray-700"></tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+        
+        <div class="space-y-6">
+          
+          
+          <div class="bg-white dark:bg-gray-800 p-6 rounded-[24px] border border-gray-100 dark:border-gray-700 shadow-sm space-y-4 text-xs">
+            <h3 class="text-sm font-bold text-[#1A1A1A] dark:text-white flex items-center gap-1.5">
+              <i data-lucide="plus-circle" class="text-[#3D56B2] w-4.5 h-4.5"></i>
+              Establish University Club
+            </h3>
+            
+            <form onsubmit="handleCreateClub(event)" class="space-y-4">
+              <div>
+                <label class="block font-semibold text-[#1A1A1A] dark:text-gray-300 mb-1">Club Name</label>
+                <input type="text" id="club-name" required placeholder="e.g. AI & ML Club" class="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-[#3D56B2] focus:outline-none dark:text-white">
+              </div>
+              
+              <div>
+                <label class="block font-semibold text-[#1A1A1A] dark:text-gray-300 mb-1">Description</label>
+                <textarea id="club-desc" required rows="3" placeholder="Focus areas..." class="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-[#3D56B2] focus:outline-none resize-none dark:text-white"></textarea>
+              </div>
+
+              <div>
+                <label class="block font-semibold text-[#1A1A1A] dark:text-gray-300 mb-1">Faculty Coordinator</label>
+                <input type="text" id="club-coordinator" required placeholder="Dr. Rajesh Kumar" class="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-[#3D56B2] focus:outline-none dark:text-white">
+              </div>
+
+              <div>
+                <label class="block font-semibold text-[#1A1A1A] dark:text-gray-300 mb-1">Assign Head Email</label>
+                <input type="email" id="club-head-email" placeholder="student@univibe.edu" class="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-[#3D56B2] focus:outline-none dark:text-white">
+              </div>
+
+              <button type="submit" id="club-submit-btn" class="w-full py-2.5 bg-[#3D56B2] hover:bg-[#2C3E8A] text-white text-xs font-semibold rounded-xl transition-all shadow">Register Club</button>
+            </form>
+          </div>
+
+          
+          <div class="bg-white dark:bg-gray-800 p-6 rounded-[24px] border border-gray-100 dark:border-gray-700 shadow-sm text-xs space-y-3">
+            <h3 class="font-bold text-[#1A1A1A] dark:text-white mb-2">Portal Quick Stats</h3>
+            <div class="flex justify-between py-1 border-b border-gray-100 dark:border-gray-700">
+              <span class="text-[#757575] dark:text-gray-400">Most Active Club:</span>
+              <span id="quick-active-club" class="font-bold text-[#3D56B2] dark:text-[#5C7AEA]">...</span>
+            </div>
+            <div class="flex justify-between py-1">
+              <span class="text-[#757575] dark:text-gray-400">Leading Contributor:</span>
+              <span id="quick-active-student" class="font-bold text-[#3D56B2] dark:text-[#5C7AEA]">...</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>

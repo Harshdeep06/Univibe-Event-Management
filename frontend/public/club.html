@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UNIVIBE - Club Dashboard</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <link rel="stylesheet" href="/css/styles.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              primary: "#3D56B2",
+              secondary: "#5C7AEA",
+              bgCanvas: "#F4F6F9",
+              card: "#FFFFFF",
+              textMain: "#1A1A1A",
+              textMuted: "#757575",
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#F4F6F9] dark:bg-[#111827] min-h-screen text-[#1A1A1A] dark:text-gray-100 transition-colors">
+  
+  <div class="min-h-screen flex flex-col md:flex-row">
+    
+    
+    <div id="sidebar-container"></div>
+
+    
+    <main class="flex-1 flex flex-col p-4 md:p-8 overflow-y-auto">
+      
+      
+      <div id="navbar-container"></div>
+
+      
+      <div id="club-loader" class="flex items-center justify-center py-12">
+        <div class="w-8 h-8 border-4 border-[#3D56B2] border-t-transparent rounded-full animate-spin"></div>
+      </div>
+
+      
+      <div id="club-content" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        
+        <div class="lg:col-span-2 space-y-6">
+          
+          
+          <div class="bg-white dark:bg-gray-800 p-6 rounded-[24px] border border-gray-100 dark:border-gray-700 flex flex-col sm:flex-row gap-5 items-center justify-between shadow-sm">
+            <div class="flex items-center gap-4">
+              <div class="w-14 h-14 rounded-full bg-[#E0E5F5] flex items-center justify-center font-bold text-xl text-[#3D56B2] overflow-hidden">
+                <span id="club-initial">C</span>
+              </div>
+              <div>
+                <span class="text-[10px] bg-[#E0E5F5] text-[#3D56B2] px-2.5 py-0.5 rounded font-bold uppercase tracking-wide">Club Head Active</span>
+                <h2 id="club-title-banner" class="text-xl font-bold text-[#1A1A1A] dark:text-white mt-1">Club Name</h2>
+                <p id="club-coordinator-banner" class="text-xs text-[#757575] dark:text-gray-400 mt-0.5">Faculty Coordinator: ...</p>
+              </div>
+            </div>
+            <a href="#create-event-section" class="px-4 py-2.5 bg-[#3D56B2] hover:bg-[#2C3E8A] text-white text-xs font-semibold rounded-xl flex items-center gap-1.5 shadow">
+              <i data-lucide="calendar" class="w-3.5 h-3.5"></i> Host New Event
+            </a>
+          </div>
+
+          
+          <div class="grid grid-cols-3 gap-4">
+            <div class="bg-white dark:bg-gray-800 p-4 rounded-[16px] shadow-sm border border-gray-100 dark:border-gray-700">
+              <div class="w-8 h-8 rounded-lg flex items-center justify-center mb-3 text-blue-500 bg-blue-50 dark:bg-gray-700">
+                <i data-lucide="users" class="w-4 h-4"></i>
+              </div>
+              <h3 id="stat-members" class="text-2xl font-extrabold text-[#1A1A1A] dark:text-white leading-none">0</h3>
+              <p class="text-[10px] text-[#757575] dark:text-gray-400 font-semibold tracking-wider uppercase mt-2">Active Members</p>
+            </div>
+            
+            <div class="bg-white dark:bg-gray-800 p-4 rounded-[16px] shadow-sm border border-gray-100 dark:border-gray-700">
+              <div class="w-8 h-8 rounded-lg flex items-center justify-center mb-3 text-yellow-500 bg-yellow-50 dark:bg-gray-700">
+                <i data-lucide="clock" class="w-4 h-4"></i>
+              </div>
+              <h3 id="stat-requests" class="text-2xl font-extrabold text-[#1A1A1A] dark:text-white leading-none">0</h3>
+              <p class="text-[10px] text-[#757575] dark:text-gray-400 font-semibold tracking-wider uppercase mt-2">Pending Requests</p>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 p-4 rounded-[16px] shadow-sm border border-gray-100 dark:border-gray-700">
+              <div class="w-8 h-8 rounded-lg flex items-center justify-center mb-3 text-green-500 bg-green-50 dark:bg-gray-700">
+                <i data-lucide="clipboard-list" class="w-4 h-4"></i>
+              </div>
+              <h3 class="text-2xl font-extrabold text-[#1A1A1A] dark:text-white leading-none">Live</h3>
+              <p class="text-[10px] text-[#757575] dark:text-gray-400 font-semibold tracking-wider uppercase mt-2">Dashboard State</p>
+            </div>
+          </div>
+
+          
+          <div id="requests-section" class="bg-white dark:bg-gray-800 p-6 rounded-[24px] border border-gray-100 dark:border-gray-700 shadow-sm space-y-4">
+            <h3 class="text-sm font-bold text-[#1A1A1A] dark:text-white flex items-center gap-1.5">
+              <i data-lucide="users" class="text-[#3D56B2] w-4.5 h-4.5"></i>
+              Pending Joining Requests (<span id="requests-badge-count">0</span>)
+            </h3>
+            <div id="requests-list" class="divide-y divide-gray-100 dark:divide-gray-700 text-xs"></div>
+            <div id="requests-empty" class="hidden text-center py-2 text-xs text-[#757575] dark:text-gray-400 italic">No pending requests.</div>
+          </div>
+
+          
+          <div id="create-event-section" class="bg-white dark:bg-gray-800 p-6 rounded-[24px] border border-gray-100 dark:border-gray-700 shadow-sm space-y-4">
+            <h3 class="text-sm font-bold text-[#1A1A1A] dark:text-white flex items-center gap-1.5">
+              <i data-lucide="plus-circle" class="text-[#3D56B2] w-4.5 h-4.5"></i>
+              Propose University Event
+            </h3>
+            <form onsubmit="handleProposeEvent(event)" class="space-y-4 text-xs">
+              <div>
+                <label class="block font-semibold text-[#1A1A1A] dark:text-gray-300 mb-1">Event Title</label>
+                <input type="text" id="ev-name" required placeholder="e.g. ByteCode Hackathon 2026" class="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-[#3D56B2] focus:outline-none dark:text-white">
+              </div>
+              <div>
+                <label class="block font-semibold text-[#1A1A1A] dark:text-gray-300 mb-1">Description</label>
+                <textarea id="ev-desc" required rows="3" placeholder="Explain details and logistics..." class="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-[#3D56B2] focus:outline-none resize-none dark:text-white"></textarea>
+              </div>
+
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block font-semibold text-[#1A1A1A] dark:text-gray-300 mb-1">Category</label>
+                  <select id="ev-cat" class="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-[#3D56B2] focus:outline-none dark:text-white">
+                    <option value="Hackathon">Hackathon</option>
+                    <option value="Workshop">Workshop</option>
+                    <option value="Quiz">Quiz</option>
+                    <option value="Music">Music</option>
+                    <option value="Sports">Sports</option>
+                    <option value="Seminar">Seminar</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block font-semibold text-[#1A1A1A] dark:text-gray-300 mb-1">Difficulty</label>
+                  <select id="ev-diff" class="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-[#3D56B2] focus:outline-none dark:text-white">
+                    <option value="Beginner">Beginner</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Advanced">Advanced</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block font-semibold text-[#1A1A1A] dark:text-gray-300 mb-1">Building</label>
+                  <input type="text" id="ev-building" required placeholder="e.g. Aryabhatta Block" class="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-[#3D56B2] focus:outline-none dark:text-white">
+                </div>
+                <div>
+                  <label class="block font-semibold text-[#1A1A1A] dark:text-gray-300 mb-1">Room</label>
+                  <input type="text" id="ev-room" required placeholder="e.g. Room 302" class="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-[#3D56B2] focus:outline-none dark:text-white">
+                </div>
+              </div>
+
+              <div class="grid grid-cols-3 gap-4">
+                <div>
+                  <label class="block font-semibold text-[#1A1A1A] dark:text-gray-300 mb-1">Event Date</label>
+                  <input type="date" id="ev-date" required class="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-[#3D56B2] focus:outline-none dark:text-white">
+                </div>
+                <div>
+                  <label class="block font-semibold text-[#1A1A1A] dark:text-gray-300 mb-1">Time</label>
+                  <input type="text" id="ev-time" required placeholder="10:00 AM" class="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-[#3D56B2] focus:outline-none dark:text-white">
+                </div>
+                <div>
+                  <label class="block font-semibold text-[#1A1A1A] dark:text-gray-300 mb-1">Capacity</label>
+                  <input type="number" id="ev-capacity" required value="100" class="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-[#3D56B2] focus:outline-none dark:text-white">
+                </div>
+              </div>
+
+              <button type="submit" id="ev-submit-btn" class="w-full py-2.5 bg-[#3D56B2] hover:bg-[#2C3E8A] text-white text-xs font-semibold rounded-xl transition-all shadow">Propose Event</button>
+            </form>
+          </div>
+
+        </div>
+
+        
+        <div class="space-y-6">
+          
+          
+          <div id="notices-section" class="bg-white dark:bg-gray-800 p-6 rounded-[24px] border border-gray-100 dark:border-gray-700 shadow-sm space-y-4">
+            <h3 class="text-sm font-bold text-[#1A1A1A] dark:text-white flex items-center gap-1.5">
+              <i data-lucide="megaphone" class="text-[#3D56B2] w-4.5 h-4.5"></i>
+              Broadcast Notice
+            </h3>
+            <form onsubmit="handlePostNotice(event)" class="space-y-3.5 text-xs">
+              <div>
+                <label class="block font-semibold text-[#1A1A1A] dark:text-gray-300 mb-1">Title</label>
+                <input type="text" id="notice-title" required placeholder="e.g. Hackathon Slot Meeting" class="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-[#3D56B2] focus:outline-none dark:text-white">
+              </div>
+              <div>
+                <label class="block font-semibold text-[#1A1A1A] dark:text-gray-300 mb-1">Message</label>
+                <textarea id="notice-content" required rows="3" placeholder="timing details..." class="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-[#3D56B2] focus:outline-none resize-none dark:text-white"></textarea>
+              </div>
+              <button type="submit" id="notice-submit-btn" class="w-full py-2.5 bg-[#3D56B2] hover:bg-[#2C3E8A] text-white text-xs font-semibold rounded-xl shadow transition-all">Send Notice</button>
+            </form>
+          </div>
+
+          
+          <div class="bg-white dark:bg-gray-800 p-6 rounded-[24px] border border-gray-100 dark:border-gray-700 shadow-sm space-y-3">
+            <h3 class="text-sm font-bold text-[#1A1A1A] dark:text-white mb-2">Active Member Registry</h3>
+            <div id="members-list" class="max-h-[220px] overflow-y-auto pr-1 space-y-3 text-xs"></div>
+            <div id="members-empty" class="hidden text-xs text-[#757575] dark:text-gray-400 italic">No approved members.</div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/club.js"></script>
+</body>
+</html>

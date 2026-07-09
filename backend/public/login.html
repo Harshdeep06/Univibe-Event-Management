@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UNIVIBE - Authentication</title>
+  <script src="/js/lucide.min.js"></script>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen px-4 py-12 relative overflow-y-auto bg-[#F4F6F9] dark:bg-[#111827] text-[#1A1A1A] dark:text-gray-100 transition-colors">
+  <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-[#3D56B2] opacity-[0.06] blur-[80px]"></div>
+  <div class="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full bg-[#5C7AEA] opacity-[0.06] blur-[80px]"></div>
+
+  
+  <div class="flex flex-col items-center mb-8 relative z-10">
+    <span class="bg-[#3D56B2] text-white px-5 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider mb-2">University Hub</span>
+    <h1 class="text-4xl font-extrabold tracking-tight">UNI<span class="text-[#3D56B2]">VIBE</span></h1>
+    <p class="text-sm text-[#757575] mt-1 dark:text-gray-400">Unified Campus Event System</p>
+  </div>
+
+  
+  <div class="bg-gray-200 dark:bg-gray-800 p-1 rounded-full flex gap-1 mb-8 shadow-sm relative z-10 w-full max-w-sm">
+    <div id="slider-indicator" class="absolute top-1 left-1 bottom-1 w-[32%] bg-white dark:bg-gray-700 rounded-full shadow transition-all duration-300 ease-in-out"></div>
+    <button onclick="setRole('student',0)"       class="flex-1 py-2 px-3 rounded-full text-xs font-semibold flex items-center justify-center gap-1.5 relative z-10 text-[#3D56B2] dark:text-white transition-colors"><i data-lucide="user" class="w-3.5 h-3.5"></i> Student</button>
+    <button onclick="setRole('club_admin',33.3)"  class="flex-1 py-2 px-3 rounded-full text-xs font-semibold flex items-center justify-center gap-1.5 relative z-10 text-[#757575] dark:text-gray-400 transition-colors"><i data-lucide="users" class="w-3.5 h-3.5"></i> Club Head</button>
+    <button onclick="setRole('super_admin',66.6)" class="flex-1 py-2 px-3 rounded-full text-xs font-semibold flex items-center justify-center gap-1.5 relative z-10 text-[#757575] dark:text-gray-400 transition-colors"><i data-lucide="shield" class="w-3.5 h-3.5"></i> Admin</button>
+  </div>
+
+  
+  <div class="w-full max-w-md bg-white dark:bg-gray-800 rounded-[24px] shadow-lg border border-white/40 dark:border-gray-700 p-8 md:p-10 relative z-10 glass-card">
+    <h2 id="form-title" class="text-xl font-bold mb-1 text-[#1A1A1A] dark:text-white">Student Authentication</h2>
+    <p id="form-subtitle" class="text-xs text-[#757575] mb-6 dark:text-gray-400">Please input credentials below.</p>
+    <div id="error-alert" class="hidden bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 p-3 rounded-xl text-xs mb-4 border border-red-100 dark:border-red-900/50"></div>
+
+    <form id="auth-form" onsubmit="handleFormSubmit(event)" class="space-y-4">
+      
+      <div id="register-name-field" class="hidden">
+        <label class="block text-xs font-semibold text-[#1A1A1A] dark:text-gray-300 mb-1">Full Name</label>
+        <input type="text" id="reg-name" placeholder="Gurpreet Singh" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900 text-xs focus:ring-2 focus:ring-[#3D56B2] focus:outline-none dark:text-white">
+      </div>
+      
+      <div id="student-register-fields" class="hidden space-y-4">
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-[#1A1A1A] dark:text-gray-300 mb-1">Roll Number</label>
+            <input type="text" id="reg-roll" placeholder="CS2023001" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900 text-xs focus:ring-2 focus:ring-[#3D56B2] focus:outline-none dark:text-white">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-[#1A1A1A] dark:text-gray-300 mb-1">Branch / Department</label>
+            <input type="text" id="reg-dept" placeholder="Computer Science" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900 text-xs focus:ring-2 focus:ring-[#3D56B2] focus:outline-none dark:text-white">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-[#1A1A1A] dark:text-gray-300 mb-1">Year of Study</label>
+          <select id="reg-year" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900 text-xs focus:ring-2 focus:ring-[#3D56B2] focus:outline-none dark:text-white">
+            <option value="1">1st Year</option><option value="2">2nd Year</option>
+            <option value="3">3rd Year</option><option value="4">4th Year</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs font-semibold text-[#1A1A1A] dark:text-gray-300 mb-1">Email Address</label>
+        <input type="email" id="auth-email" required placeholder="student@univibe.edu" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900 text-xs focus:ring-2 focus:ring-[#3D56B2] focus:outline-none dark:text-white">
+      </div>
+      <div>
+        <div class="flex justify-between items-center mb-1">
+          <label class="block text-xs font-semibold text-[#1A1A1A] dark:text-gray-300">Password</label>
+          <button type="button" onclick="alert('Simulated email verification sent.')" class="text-[10px] text-[#3D56B2] font-semibold hover:underline">Forgot Password?</button>
+        </div>
+        <input type="password" id="auth-password" required placeholder="••••••••" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900 text-xs focus:ring-2 focus:ring-[#3D56B2] focus:outline-none dark:text-white">
+      </div>
+      <button type="submit" id="submit-btn" class="w-full py-3 bg-[#3D56B2] hover:bg-[#2C3E8A] text-white text-xs font-semibold rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5">
+        <span>Authenticate</span><i data-lucide="arrow-right" class="w-4 h-4"></i>
+      </button>
+    </form>
+
+    <div id="register-toggle-container" class="mt-6 text-center">
+      <button onclick="toggleRegisterMode()" id="register-toggle-btn" class="text-xs text-[#3D56B2] font-semibold hover:underline">New student? Register profile</button>
+    </div>
+
+    
+    <div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs">
+      <p class="font-semibold text-gray-500 mb-2">Click to auto-fill demo accounts:</p>
+      <div class="grid grid-cols-1 gap-2">
+        <button type="button" onclick="fillDemo('student', 'student1@univibe.edu', 'studentpassword', 0)" class="flex justify-between p-2 rounded-lg bg-gray-50 hover:bg-gray-100 dark:bg-gray-900/50 dark:hover:bg-gray-900 text-left border border-gray-100 dark:border-gray-800 transition-all">
+          <span>🎓 Student: <span class="font-semibold text-brand-primary">student1@univibe.edu</span></span>
+          <span class="text-[10px] text-gray-400">studentpassword</span>
+        </button>
+        <button type="button" onclick="fillDemo('club_admin', 'codinghead@univibe.edu', 'clubpassword', 33.3)" class="flex justify-between p-2 rounded-lg bg-gray-50 hover:bg-gray-100 dark:bg-gray-900/50 dark:hover:bg-gray-900 text-left border border-gray-100 dark:border-gray-800 transition-all">
+          <span>👥 Club Head: <span class="font-semibold text-brand-primary">codinghead@univibe.edu</span></span>
+          <span class="text-[10px] text-gray-400">clubpassword</span>
+        </button>
+        <button type="button" onclick="fillDemo('super_admin', 'admin@univibe.edu', 'adminpassword', 66.6)" class="flex justify-between p-2 rounded-lg bg-gray-50 hover:bg-gray-100 dark:bg-gray-900/50 dark:hover:bg-gray-900 text-left border border-gray-100 dark:border-gray-800 transition-all">
+          <span>🛡️ Admin: <span class="font-semibold text-brand-primary">admin@univibe.edu</span></span>
+          <span class="text-[10px] text-gray-400">adminpassword</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script>
+    let currentRole = 'student', isRegistering = false;
+
+    function fillDemo(role, email, pass, pct) {
+      if (isRegistering) toggleRegisterMode();
+      setRole(role, pct);
+      document.getElementById('auth-email').value = email;
+      document.getElementById('auth-password').value = pass;
+    }
+
+
+    function setRole(role, pct) {
+      currentRole = role; isRegistering = false;
+      document.getElementById('error-alert').classList.add('hidden');
+      const ind = document.getElementById('slider-indicator');
+      ind.style.left = `calc(${pct}% + 4px)`;
+      ind.style.width = pct === 33.3 ? '33%' : '32%';
+      document.querySelectorAll('button[onclick^="setRole"]').forEach((btn,i) => {
+        const active = (pct===0&&i===0)||(pct===33.3&&i===1)||(pct===66.6&&i===2);
+        btn.className = btn.className
+          .replace(active?'text-[#757575] dark:text-gray-400':'text-[#3D56B2] dark:text-white', active?'text-[#3D56B2] dark:text-white':'text-[#757575] dark:text-gray-400');
+      });
+      const titles = { student:'Student Authentication', club_admin:'Club Head Authentication', super_admin:'Super Admin Authentication' };
+      const placeholders = { student:'student@univibe.edu', club_admin:'clubhead@univibe.edu', super_admin:'admin@univibe.edu' };
+      document.getElementById('form-title').innerText = titles[role];
+      document.getElementById('auth-email').placeholder = placeholders[role];
+      document.getElementById('register-name-field').classList.add('hidden');
+      document.getElementById('student-register-fields').classList.add('hidden');
+      ['reg-name','reg-roll','reg-dept'].forEach(id=>document.getElementById(id).required=false);
+      document.getElementById('register-toggle-container').classList.toggle('hidden', role === 'super_admin');
+      document.getElementById('register-toggle-btn').innerText = role === 'club_admin' ? 'New Club Head? Register profile' : 'New student? Register profile';
+    }
+
+    function toggleRegisterMode() {
+      isRegistering = !isRegistering;
+      document.getElementById('error-alert').classList.add('hidden');
+      
+      const isStudent = currentRole === 'student';
+      const isClubHead = currentRole === 'club_admin';
+
+      document.getElementById('register-name-field').classList.toggle('hidden', !isRegistering);
+      document.getElementById('reg-name').required = isRegistering;
+
+      document.getElementById('student-register-fields').classList.toggle('hidden', !isRegistering || !isStudent);
+      ['reg-roll','reg-dept'].forEach(id=>document.getElementById(id).required = (isRegistering && isStudent));
+
+      if (isStudent) {
+        document.getElementById('form-title').innerText    = isRegistering ? 'Create Student Profile'       : 'Student Authentication';
+        document.getElementById('form-subtitle').innerText = isRegistering ? 'Join UNIVIBE and explore active university life.' : 'Please input credentials below.';
+        document.getElementById('register-toggle-btn').innerText = isRegistering ? 'Already have a profile? Login' : 'New student? Register profile';
+      } else if (isClubHead) {
+        document.getElementById('form-title').innerText    = isRegistering ? 'Register as Club Head'       : 'Club Head Authentication';
+        document.getElementById('form-subtitle').innerText = isRegistering ? 'Create your leader profile. Awaiting Super Admin verification.' : 'Please input credentials below.';
+        document.getElementById('register-toggle-btn').innerText = isRegistering ? 'Already have a profile? Login' : 'New Club Head? Register profile';
+      }
+
+      document.querySelector('#submit-btn span').innerText = isRegistering ? 'Complete Registration' : 'Authenticate';
+    }
+
+    async function handleFormSubmit(e) {
+      e.preventDefault();
+      const alertBox = document.getElementById('error-alert');
+      alertBox.classList.add('hidden');
+      const btn = document.getElementById('submit-btn');
+      btn.disabled = true;
+      btn.innerHTML = `<div class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>`;
+      try {
+        const email    = document.getElementById('auth-email').value;
+        const password = document.getElementById('auth-password').value;
+        let res;
+
+        if (isRegistering) {
+          if (currentRole === 'club_admin') {
+            res = await fetchAPI('/auth/register', { method:'POST', body: JSON.stringify({
+              name: document.getElementById('reg-name').value,
+              email, password,
+              role: 'club_admin'
+            })});
+            alert('Registration request submitted! Awaiting Super Admin verification before login.');
+            isRegistering = false;
+            setRole('club_admin', 33.3);
+            btn.disabled = false;
+            btn.innerHTML = `<span>Authenticate</span><i data-lucide="arrow-right" class="w-4 h-4"></i>`;
+            lucide.createIcons();
+            return;
+          } else {
+            res = await fetchAPI('/auth/register', { method:'POST', body: JSON.stringify({
+              name: document.getElementById('reg-name').value,
+              email, password,
+              rollNumber: document.getElementById('reg-roll').value,
+              department: document.getElementById('reg-dept').value,
+              yearOfStudy: Number(document.getElementById('reg-year').value),
+              role: 'student'
+            })});
+            localStorage.setItem('univibe_token', res.token);
+            localStorage.setItem('univibe_user', JSON.stringify(res.user));
+            window.location.href = '/student';
+          }
+        } else {
+          res = await fetchAPI('/auth/login', { method:'POST', body: JSON.stringify({ email, password, role: currentRole }) });
+          localStorage.setItem('univibe_token', res.token);
+          localStorage.setItem('univibe_user', JSON.stringify(res.user));
+          const profileRes = await fetchAPI('/auth/me');
+          if (profileRes.success) localStorage.setItem('univibe_profile', JSON.stringify(profileRes.profile));
+          const redirects = { super_admin:'/admin', club_admin:'/club', student:'/student' };
+          window.location.href = redirects[currentRole] || '/';
+        }
+      } catch(err) {
+        alertBox.innerText = err.message || 'Login failed. Check credentials.';
+        alertBox.classList.remove('hidden');
+        btn.disabled = false;
+        btn.innerHTML = `<span>${isRegistering?'Complete Registration':'Authenticate'}</span><i data-lucide="arrow-right" class="w-4 h-4"></i>`;
+        lucide.createIcons();
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => lucide.createIcons());
+  </script>
+</body>
+</html>

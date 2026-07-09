@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UNIVIBE - Explore Events</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <link rel="stylesheet" href="/css/styles.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              primary: "#3D56B2",
+              secondary: "#5C7AEA",
+              bgCanvas: "#F4F6F9",
+              card: "#FFFFFF",
+              textMain: "#1A1A1A",
+              textMuted: "#757575",
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#F4F6F9] dark:bg-[#111827] min-h-screen text-[#1A1A1A] dark:text-gray-100 transition-colors">
+  
+  <div class="min-h-screen flex flex-col md:flex-row">
+    
+    
+    <div id="sidebar-container"></div>
+
+    
+    <main class="flex-1 flex flex-col p-4 md:p-8 overflow-y-auto">
+      
+      
+      <div id="navbar-container"></div>
+
+      
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        
+        <div class="lg:col-span-2 space-y-6">
+          
+          
+          <div class="bg-[#3D56B2] text-white p-6 rounded-[24px] shadow-sm relative overflow-hidden flex items-center justify-between min-h-[140px]">
+            <div class="absolute right-[-20px] bottom-[-20px] w-52 h-52 rounded-full bg-[#5C7AEA] opacity-[0.25] blur-2xl"></div>
+            <div class="relative z-10 max-w-md">
+              <span class="bg-white/20 text-white px-3 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider">
+                UNIVIBE Active Board
+              </span>
+              <h2 class="text-xl font-extrabold mt-3 leading-tight">Unlock Active Campus Living & Hackathons!</h2>
+              <p class="text-xs text-[#E5E7EB] mt-1.5 leading-relaxed">
+                Check details, reserve digital tickets, log attendance with automated QR check-in, and download certificates.
+              </p>
+            </div>
+            <div class="hidden sm:block text-5xl relative z-10">🚀</div>
+          </div>
+
+          
+          <div class="bg-white dark:bg-gray-800 p-4 rounded-[16px] shadow-sm border border-gray-100 dark:border-gray-700 flex flex-wrap items-center gap-3 justify-between">
+            <div class="flex flex-wrap items-center gap-2">
+              <select id="cat-filter" onchange="applyFilters()" class="px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-[11px] font-medium text-[#757575] focus:outline-none">
+                <option value="">All Categories</option>
+                <option value="Hackathon">Hackathon</option>
+                <option value="Workshop">Workshop</option>
+                <option value="Quiz">Quiz</option>
+                <option value="Music">Music</option>
+                <option value="Sports">Sports</option>
+                <option value="Seminar">Seminar</option>
+              </select>
+
+              <select id="diff-filter" onchange="applyFilters()" class="px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-[11px] font-medium text-[#757575] focus:outline-none">
+                <option value="">Difficulty Level</option>
+                <option value="Beginner">Beginner</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Advanced">Advanced</option>
+              </select>
+            </div>
+
+            <div class="flex gap-2">
+              <input type="text" id="search-filter" placeholder="Filter search..." class="px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-[11px] focus:outline-none dark:text-white">
+              <button onclick="applyFilters()" class="px-3 py-1.5 bg-[#3D56B2] text-white text-[11px] font-bold rounded-full shadow hover:bg-[#2C3E8A] transition-all">Apply</button>
+              <button onclick="resetFilters()" class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 text-[11px] font-bold rounded-full transition-all">Reset</button>
+            </div>
+          </div>
+
+          
+          <div id="events-loader" class="hidden flex items-center justify-center py-12">
+            <div class="w-6 h-6 border-2 border-[#3D56B2] border-t-transparent rounded-full animate-spin"></div>
+          </div>
+          <div id="events-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-6"></div>
+          <div id="events-empty" class="hidden text-center py-12 bg-white dark:bg-gray-800 rounded-[20px] border border-gray-100 dark:border-gray-700">
+            <i data-lucide="layers" class="mx-auto text-gray-300 mb-2 w-8 h-8"></i>
+            <p class="text-xs text-[#757575] dark:text-gray-400 font-medium">No published events match your query.</p>
+          </div>
+
+        </div>
+
+        
+        <div class="space-y-6">
+          <div class="bg-white dark:bg-gray-800 p-6 rounded-[24px] border border-gray-100 dark:border-gray-700 shadow-sm">
+            <h3 class="text-sm font-bold text-[#1A1A1A] dark:text-white mb-4 flex items-center gap-1.5">
+              <i data-lucide="megaphone" class="text-[#3D56B2] w-4.5 h-4.5"></i>
+              Announcements Board
+            </h3>
+            <div id="notices-list" class="space-y-4"></div>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/index.js"></script>
+</body>
+</html>

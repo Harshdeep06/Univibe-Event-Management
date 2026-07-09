@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UNIVIBE - Student Dashboard</title>
+  <script src="/js/lucide.min.js"></script>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="bg-[#F4F6F9] dark:bg-[#111827] min-h-screen text-[#1A1A1A] dark:text-gray-100 transition-colors">
+  <div class="min-h-screen flex flex-col md:flex-row">
+    <div id="sidebar-container"></div>
+    <main class="flex-1 flex flex-col p-4 md:p-8 overflow-y-auto">
+      <div id="navbar-container"></div>
+
+      <div id="student-loader" class="flex items-center justify-center py-12">
+        <div class="w-8 h-8 border-4 border-[#3D56B2] border-t-transparent rounded-full animate-spin"></div>
+      </div>
+
+      <div id="dashboard-content" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 space-y-6">
+
+          <!-- Upcoming Event Banner -->
+          <div id="upcoming-banner-container" class="space-y-4"></div>
+
+          <!-- Stats Row -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div class="bg-white dark:bg-gray-800 p-4 rounded-[16px] shadow-sm border border-gray-100 dark:border-gray-700">
+              <div class="w-8 h-8 rounded-lg flex items-center justify-center mb-3 text-blue-500 bg-blue-50 dark:bg-gray-700"><i data-lucide="calendar" class="w-4 h-4"></i></div>
+              <h3 id="stat-registered" class="text-2xl font-extrabold text-[#1A1A1A] dark:text-white leading-none">0</h3>
+              <p class="text-[10px] text-[#757575] dark:text-gray-400 font-semibold tracking-wider uppercase mt-2">Participated</p>
+            </div>
+            <div class="bg-white dark:bg-gray-800 p-4 rounded-[16px] shadow-sm border border-gray-100 dark:border-gray-700">
+              <div class="w-8 h-8 rounded-lg flex items-center justify-center mb-3 text-green-500 bg-green-50 dark:bg-gray-700"><i data-lucide="trophy" class="w-4 h-4"></i></div>
+              <h3 id="stat-attended" class="text-2xl font-extrabold text-[#1A1A1A] dark:text-white leading-none">0</h3>
+              <p class="text-[10px] text-[#757575] dark:text-gray-400 font-semibold tracking-wider uppercase mt-2">Attended</p>
+            </div>
+            <div class="bg-white dark:bg-gray-800 p-4 rounded-[16px] shadow-sm border border-gray-100 dark:border-gray-700">
+              <div class="w-8 h-8 rounded-lg flex items-center justify-center mb-3 text-purple-500 bg-purple-50 dark:bg-gray-700"><i data-lucide="sparkles" class="w-4 h-4"></i></div>
+              <h3 id="stat-points" class="text-2xl font-extrabold text-[#1A1A1A] dark:text-white leading-none">0</h3>
+              <p class="text-[10px] text-[#757575] dark:text-gray-400 font-semibold tracking-wider uppercase mt-2">Reward Points</p>
+            </div>
+            <div class="bg-white dark:bg-gray-800 p-4 rounded-[16px] shadow-sm border border-gray-100 dark:border-gray-700">
+              <div class="w-8 h-8 rounded-lg flex items-center justify-center mb-3 text-yellow-500 bg-yellow-50 dark:bg-gray-700"><i data-lucide="award" class="w-4 h-4"></i></div>
+              <h3 id="stat-certs" class="text-2xl font-extrabold text-[#1A1A1A] dark:text-white leading-none">0</h3>
+              <p class="text-[10px] text-[#757575] dark:text-gray-400 font-semibold tracking-wider uppercase mt-2">Earned Badges</p>
+            </div>
+          </div>
+
+          <!-- Schedule Timeline -->
+          <div id="schedule-section" class="bg-white dark:bg-gray-800 p-6 rounded-[24px] border border-gray-100 dark:border-gray-700 shadow-sm space-y-4">
+            <h3 class="text-sm font-bold text-[#1A1A1A] dark:text-white flex items-center gap-1.5"><i data-lucide="calendar" class="text-[#3D56B2] w-4 h-4"></i> Registered Schedule</h3>
+            <div id="timeline-list" class="relative pl-6 border-l-2 border-dashed border-gray-200 dark:border-gray-700 space-y-6"></div>
+            <div id="timeline-empty" class="hidden text-center py-4 text-[#757575] dark:text-gray-400 italic text-xs">No registered events.</div>
+          </div>
+
+          <!-- Attendance & Badges Locker -->
+          <div id="attendance-section" class="bg-white dark:bg-gray-800 p-6 rounded-[24px] border border-gray-100 dark:border-gray-700 shadow-sm space-y-4">
+            <h3 class="text-sm font-bold text-[#1A1A1A] dark:text-white flex items-center gap-1.5"><i data-lucide="award" class="text-[#3D56B2] w-4 h-4"></i> Attendance & Badges Locker</h3>
+            <div class="overflow-x-auto text-xs">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="border-b border-gray-100 dark:border-gray-700 text-[#757575] dark:text-gray-400 font-semibold">
+                    <th class="pb-3 pr-4">Event Name</th>
+                    <th class="pb-3 pr-4">Host Club</th>
+                    <th class="pb-3 pr-4">Date & Time</th>
+                    <th class="pb-3 pr-4">Earned Badge</th>
+                    <th class="pb-3 text-right">Points Gained</th>
+                  </tr>
+                </thead>
+                <tbody id="attendance-list-body" class="divide-y divide-gray-50 dark:divide-gray-700"></tbody>
+              </table>
+            </div>
+            <div id="attendance-empty" class="hidden text-center py-4 text-[#757575] dark:text-gray-400 italic text-xs">No attendance checked in. Check-in to attend events.</div>
+          </div>
+
+          <!-- Announcements Board -->
+          <div id="announcements-section" class="bg-white dark:bg-gray-800 p-6 rounded-[24px] border border-gray-100 dark:border-gray-700 shadow-sm space-y-4">
+            <h3 class="text-sm font-bold text-[#1A1A1A] dark:text-white flex items-center gap-1.5"><i data-lucide="megaphone" class="text-[#3D56B2] w-4 h-4"></i> Announcements Board</h3>
+            <div id="student-announcements-list" class="space-y-3 max-h-60 overflow-y-auto pr-1">
+              <p class="text-[10px] text-[#757575] italic text-center py-4">No announcements posted.</p>
+            </div>
+          </div>
+
+          <!-- Bookmarks -->
+          <div id="bookmarks-section" class="space-y-3">
+            <h3 class="text-base font-bold text-[#1A1A1A] dark:text-white">Saved Bookmarks</h3>
+            <div id="bookmarks-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+            <div id="bookmarks-empty" class="hidden text-xs text-[#757575] dark:text-gray-400 italic">No bookmarked events saved.</div>
+          </div>
+        </div>
+
+        <!-- Sidebar Widgets -->
+        <div class="space-y-6">
+          <!-- Badges -->
+          <div class="bg-white dark:bg-gray-800 p-6 rounded-[24px] border border-gray-100 dark:border-gray-700 shadow-sm">
+            <h3 class="text-sm font-bold text-[#1A1A1A] dark:text-white mb-3.5 flex items-center gap-1.5"><i data-lucide="award" class="text-[#3D56B2] w-4 h-4"></i> Earned Badges</h3>
+            <div class="flex items-center gap-3 mt-2 bg-gray-50 dark:bg-gray-700/30 p-4 rounded-2xl border border-gray-100 dark:border-gray-700">
+              <div class="w-10 h-10 rounded-full bg-yellow-50 dark:bg-yellow-900/25 flex items-center justify-center text-yellow-500"><i data-lucide="award" class="w-5 h-5"></i></div>
+              <div>
+                <h4 class="text-xl font-extrabold text-[#1A1A1A] dark:text-white" id="sidebar-badges-count">0</h4>
+                <p class="text-[10px] text-[#757575] dark:text-gray-400 font-semibold uppercase tracking-wider mt-0.5">Badges Unlocked</p>
+              </div>
+            </div>
+            <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700 text-[10px] text-[#757575] dark:text-gray-400">
+              <span class="font-semibold text-[#3D56B2]">How to unlock badges?</span>
+              <ul class="list-disc pl-4 space-y-1 mt-1">
+                <li>Check-in to events to get <span class="font-semibold">+50 points</span></li>
+                <li>Unlock <strong>Event Explorer</strong> at 100 pts</li>
+                <li>Unlock <strong>Super Scholar</strong> at 300 pts</li>
+                <li>Unlock <strong>UNIVIBE Champion</strong> at 500 pts</li>
+              </ul>
+            </div>
+          </div>
+          <div class="bg-white dark:bg-gray-800 p-6 rounded-[24px] border border-gray-100 dark:border-gray-700 shadow-sm">
+            <h3 class="text-sm font-bold text-[#1A1A1A] dark:text-white mb-4 flex items-center gap-1.5"><i data-lucide="trophy" class="text-[#3D56B2] w-4 h-4"></i> Punjabi Students</h3>
+            <div id="leaderboard-list" class="space-y-3.5"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/student.js"></script>
+</body>
+</html>

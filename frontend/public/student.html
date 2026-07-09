@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UNIVIBE - Student Dashboard</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <link rel="stylesheet" href="/css/styles.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              primary: "#3D56B2",
+              secondary: "#5C7AEA",
+              bgCanvas: "#F4F6F9",
+              card: "#FFFFFF",
+              textMain: "#1A1A1A",
+              textMuted: "#757575",
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#F4F6F9] dark:bg-[#111827] min-h-screen text-[#1A1A1A] dark:text-gray-100 transition-colors">
+  
+  <div class="min-h-screen flex flex-col md:flex-row">
+    
+    
+    <div id="sidebar-container"></div>
+
+    
+    <main class="flex-1 flex flex-col p-4 md:p-8 overflow-y-auto">
+      
+      
+      <div id="navbar-container"></div>
+
+      
+      <div id="student-loader" class="flex items-center justify-center py-12">
+        <div class="w-8 h-8 border-4 border-[#3D56B2] border-t-transparent rounded-full animate-spin"></div>
+      </div>
+
+      <div id="dashboard-content" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        
+        <div class="lg:col-span-2 space-y-6">
+          
+          
+          <div id="upcoming-banner-container" class="space-y-4"></div>
+
+          
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div class="bg-white dark:bg-gray-800 p-4 rounded-[16px] shadow-sm border border-gray-100 dark:border-gray-700">
+              <div class="w-8 h-8 rounded-lg flex items-center justify-center mb-3 text-blue-500 bg-blue-50 dark:bg-gray-700">
+                <i data-lucide="calendar" class="w-4 h-4"></i>
+              </div>
+              <h3 id="stat-registered" class="text-2xl font-extrabold text-[#1A1A1A] dark:text-white leading-none">0</h3>
+              <p class="text-[10px] text-[#757575] dark:text-gray-400 font-semibold tracking-wider uppercase mt-2">Participated</p>
+            </div>
+            
+            <div class="bg-white dark:bg-gray-800 p-4 rounded-[16px] shadow-sm border border-gray-100 dark:border-gray-700">
+              <div class="w-8 h-8 rounded-lg flex items-center justify-center mb-3 text-green-500 bg-green-50 dark:bg-gray-700">
+                <i data-lucide="trophy" class="w-4 h-4"></i>
+              </div>
+              <h3 id="stat-attended" class="text-2xl font-extrabold text-[#1A1A1A] dark:text-white leading-none">0</h3>
+              <p class="text-[10px] text-[#757575] dark:text-gray-400 font-semibold tracking-wider uppercase mt-2">Attended</p>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 p-4 rounded-[16px] shadow-sm border border-gray-100 dark:border-gray-700">
+              <div class="w-8 h-8 rounded-lg flex items-center justify-center mb-3 text-purple-500 bg-purple-50 dark:bg-gray-700">
+                <i data-lucide="sparkles" class="w-4 h-4"></i>
+              </div>
+              <h3 id="stat-points" class="text-2xl font-extrabold text-[#1A1A1A] dark:text-white leading-none">0</h3>
+              <p class="text-[10px] text-[#757575] dark:text-gray-400 font-semibold tracking-wider uppercase mt-2">Reward Points</p>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 p-4 rounded-[16px] shadow-sm border border-gray-100 dark:border-gray-700">
+              <div class="w-8 h-8 rounded-lg flex items-center justify-center mb-3 text-yellow-500 bg-yellow-50 dark:bg-gray-700">
+                <i data-lucide="award" class="w-4 h-4"></i>
+              </div>
+              <h3 id="stat-certs" class="text-2xl font-extrabold text-[#1A1A1A] dark:text-white leading-none">0</h3>
+              <p class="text-[10px] text-[#757575] dark:text-gray-400 font-semibold tracking-wider uppercase mt-2">Certificates</p>
+            </div>
+          </div>
+
+          
+          <div id="schedule-section" class="bg-white dark:bg-gray-800 p-6 rounded-[24px] border border-gray-100 dark:border-gray-700 shadow-sm space-y-4">
+            <h3 class="text-sm font-bold text-[#1A1A1A] dark:text-white flex items-center gap-1.5">
+              <i data-lucide="calendar" class="text-[#3D56B2] w-4.5 h-4.5"></i>
+              Registered Schedule
+            </h3>
+            <div id="timeline-list" class="relative pl-6 border-l-2 border-dashed border-gray-200 dark:border-gray-700 space-y-6"></div>
+            <div id="timeline-empty" class="hidden text-center py-4 text-[#757575] dark:text-gray-400 italic text-xs">No registered events.</div>
+          </div>
+
+          
+          <div id="certs-section" class="bg-white dark:bg-gray-800 p-6 rounded-[24px] border border-gray-100 dark:border-gray-700 shadow-sm space-y-4">
+            <h3 class="text-sm font-bold text-[#1A1A1A] dark:text-white flex items-center gap-1.5">
+              <i data-lucide="award" class="text-[#3D56B2] w-4.5 h-4.5"></i>
+              Certificates Locker
+            </h3>
+            <canvas id="cert-download-canvas" style="display: none;"></canvas>
+            <div id="certs-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+            <div id="certs-empty" class="hidden text-center py-4 text-[#757575] dark:text-gray-400 italic text-xs">No credentials issued. Check-in to attend events.</div>
+          </div>
+
+          
+          <div id="bookmarks-section" class="space-y-3">
+            <h3 class="text-base font-bold text-[#1A1A1A] dark:text-white">Saved Bookmarks</h3>
+            <div id="bookmarks-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+            <div id="bookmarks-empty" class="hidden text-xs text-[#757575] dark:text-gray-400 italic">No bookmarked events saved.</div>
+          </div>
+
+        </div>
+
+        
+        <div class="space-y-6">
+          
+          
+          <div class="bg-white dark:bg-gray-800 p-6 rounded-[24px] border border-gray-100 dark:border-gray-700 shadow-sm">
+            <h3 class="text-sm font-bold text-[#1A1A1A] dark:text-white mb-3.5 flex items-center gap-1.5">
+              <i data-lucide="award" class="text-[#3D56B2] w-4.5 h-4.5"></i>
+              Earned Badges
+            </h3>
+            <div id="badges-container" class="flex flex-wrap gap-2.5"></div>
+            <div id="badges-empty" class="hidden text-center py-4 text-[11px] text-[#757575] dark:text-gray-400">
+              No badges unlocked. Check-in to events to get points!
+            </div>
+            
+            <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700 text-[10px] text-[#757575] dark:text-gray-400">
+              <span class="font-semibold text-[#3D56B2]">How to unlock badges?</span>
+              <ul class="list-disc pl-4 space-y-1 mt-1">
+                <li>Check-in to events to get <span class="font-semibold">+50 points</span></li>
+                <li>Unlock <span class="font-bold">Event Explorer</span> at 100 points</li>
+                <li>Unlock <span class="font-bold">Super Scholar</span> at 300 points</li>
+                <li>Unlock <span class="font-bold">UNIVIBE Champion</span> at 500 points</li>
+              </ul>
+            </div>
+          </div>
+
+          
+          <div class="bg-white dark:bg-gray-800 p-6 rounded-[24px] border border-gray-100 dark:border-gray-700 shadow-sm">
+            <h3 class="text-sm font-bold text-[#1A1A1A] dark:text-white mb-4 flex items-center gap-1.5">
+              <i data-lucide="trophy" class="text-[#3D56B2] w-4.5 h-4.5"></i>
+              Punjabi Students
+            </h3>
+            <div id="leaderboard-list" class="space-y-3.5"></div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/student.js"></script>
+</body>
+</html>

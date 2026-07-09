@@ -1,0 +1,10 @@
+{
+  "name": "univibe",
+  "version": "1.0.0",
+  "description": "UNIVIBE - Event Management System",
+  "scripts": {
+    "start": "node start.js"
+  },
+  "author": "",
+  "license": "ISC"
+}

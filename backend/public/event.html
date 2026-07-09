@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UNIVIBE - Event Details</title>
+  <script src="/js/lucide.min.js"></script>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="bg-[#F4F6F9] dark:bg-[#111827] min-h-screen text-[#1A1A1A] dark:text-gray-100 transition-colors">
+  <div class="min-h-screen flex flex-col md:flex-row">
+    <div id="sidebar-container"></div>
+    <main class="flex-1 flex flex-col p-4 md:p-8 overflow-y-auto">
+      <div id="navbar-container"></div>
+
+      <div id="event-loader" class="flex items-center justify-center py-12">
+        <div class="w-8 h-8 border-4 border-[#3D56B2] border-t-transparent rounded-full animate-spin"></div>
+      </div>
+
+      <div id="event-content" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 space-y-6">
+
+          <!-- Event Card -->
+          <div class="bg-white dark:bg-gray-800 rounded-[24px] shadow-sm overflow-hidden border border-gray-100 dark:border-gray-700">
+            <div id="event-poster-container" class="h-64 sm:h-80 w-full relative bg-gray-100 dark:bg-gray-900 hidden">
+              <img id="event-poster" src="" alt="Event Poster" class="object-cover w-full h-full">
+            </div>
+            <div class="p-6 md:p-8 space-y-6">
+              <div>
+                <span id="event-category-tag" class="bg-[#E0E5F5] text-[#3D56B2] px-3 py-1 rounded text-xs font-bold uppercase tracking-wider">Category</span>
+                <h1 id="event-title" class="text-2xl font-extrabold text-[#1A1A1A] dark:text-white mt-3">Event Title</h1>
+                <p id="event-club" class="text-xs text-[#757575] dark:text-gray-400 mt-1">Host Club: ...</p>
+              </div>
+              <div class="text-xs text-[#1A1A1A] dark:text-gray-300 space-y-2 leading-relaxed">
+                <h3 class="font-bold text-sm">About the Event</h3>
+                <p id="event-desc">...</p>
+              </div>
+              <!-- Details Row -->
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 border-y border-gray-100 dark:border-gray-700 py-4 text-xs">
+                <div class="flex items-center gap-2.5"><i data-lucide="calendar" class="text-[#3D56B2] w-4 h-4"></i><div><h4 class="font-bold">Schedule Date</h4><p id="detail-date" class="text-[#757575] mt-0.5">...</p></div></div>
+                <div class="flex items-center gap-2.5"><i data-lucide="map-pin" class="text-[#3D56B2] w-4 h-4"></i><div><h4 class="font-bold">Location Venue</h4><p id="detail-venue" class="text-[#757575] mt-0.5">...</p></div></div>
+                 <div class="flex items-center gap-2.5"><i data-lucide="award" class="text-[#3D56B2] w-4 h-4"></i><div><h4 class="font-bold">Badge Credit</h4><p id="detail-certs" class="text-[#757575] mt-0.5">Yes, on present</p></div></div>
+              </div>
+              <!-- Rules & Prizes -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-xs">
+                <div id="rules-box" class="hidden">
+                  <h3 class="font-bold mb-2 flex items-center gap-1"><i data-lucide="book-open" class="text-[#3D56B2] w-4 h-4"></i> Rules &amp; Regulations</h3>
+                  <ul id="rules-list" class="list-disc pl-4 space-y-1 text-[#757575] dark:text-gray-300"></ul>
+                </div>
+                <div id="prizes-box" class="hidden">
+                  <h3 class="font-bold mb-2 flex items-center gap-1"><i data-lucide="trophy" class="text-[#3D56B2] w-4 h-4"></i> Cash Prizes</h3>
+                  <ul id="prizes-list" class="list-disc pl-4 space-y-1 text-[#3D56B2] font-semibold"></ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actions Sidebar -->
+        <div class="space-y-6 text-xs">
+          <div class="bg-white dark:bg-gray-800 p-6 rounded-[24px] border border-gray-100 dark:border-gray-700 shadow-sm space-y-4">
+            <!-- Student Actions -->
+            <div id="student-actions-block" class="hidden space-y-4">
+              <h3 class="font-bold text-sm text-[#1A1A1A] dark:text-white">Registration Portal</h3>
+              <div id="status-unregistered" class="hidden space-y-3">
+                <p class="text-[#757575]">Registration is open. Secure your digital ticket below.</p>
+                <button onclick="handleRegister()" id="btn-register" class="w-full py-2.5 bg-[#3D56B2] hover:bg-[#2C3E8A] text-white text-xs font-semibold rounded-xl transition-all shadow flex items-center justify-center gap-1">Register &amp; Get Ticket</button>
+              </div>
+              <div id="status-pending" class="hidden space-y-3 text-center">
+                <div class="p-3 bg-yellow-50 text-yellow-700 rounded-xl font-semibold border border-yellow-100 flex items-center justify-center gap-1"><i data-lucide="clock" class="w-4 h-4"></i> Registration Pending Approval!</div>
+                <p class="text-[#757575] text-[11px]">Your request is sent to the club organizers. You will be notified once they confirm it.</p>
+                <button onclick="handleCancel()" class="w-full py-2 bg-red-50 hover:bg-red-100 text-red-600 font-semibold rounded-lg flex items-center justify-center gap-1 text-[10px] border border-red-100">Cancel Request</button>
+              </div>
+              <div id="status-registered" class="hidden space-y-4 text-center">
+                <div class="p-3 bg-green-50 text-green-700 rounded-xl font-semibold border border-green-100 flex items-center justify-center gap-1"><i data-lucide="check-circle" class="w-4 h-4"></i> Registered successfully!</div>
+                <p id="ticket-resolved-by" class="text-[10px] text-green-600 dark:text-green-400 font-medium italic mt-0.5"></p>
+                <div class="border border-dashed border-gray-300 dark:border-gray-600 rounded-xl p-4 bg-gray-50/50 flex flex-col items-center">
+                  <span id="ticket-code-label" class="font-bold text-xs uppercase tracking-wider text-[#3D56B2]">TKT-CODE</span>
+                  <div class="w-32 h-32 bg-white border border-gray-200 rounded-lg p-2.5 mt-3 flex items-center justify-center"><i data-lucide="qr-code" class="w-24 h-24 text-[#1A1A1A]"></i></div>
+                  <span class="text-[9px] text-[#757575] mt-2">Check-in Presenter Code</span>
+                </div>
+                <button onclick="handleCancel()" class="w-full py-2 bg-red-50 hover:bg-red-100 text-red-600 font-semibold rounded-lg flex items-center justify-center gap-1 text-[10px] border border-red-100">Cancel Ticket</button>
+              </div>
+              <div id="status-attended" class="hidden space-y-4 text-center">
+                <div class="p-3 bg-green-50 text-green-700 rounded-xl font-semibold border border-green-100 flex items-center justify-center gap-1"><i data-lucide="check-circle" class="w-4 h-4"></i> Attended check-in logged!</div>
+                <div class="p-4 bg-gray-50 dark:bg-gray-850 rounded-xl border border-gray-100 dark:border-gray-750 text-xs">
+                  <p class="font-bold text-[#1A1A1A] dark:text-white">Award earned: 🎖️ Category Badge</p>
+                  <p class="text-[#757575] mt-1">Check-in confirmed. Check your Attendance &amp; Badges Locker in My Dashboard.</p>
+                </div>
+              </div>
+              <!-- Bookmark toggle button -->
+              <button onclick="handleToggleBookmark()" id="btn-bookmark" class="w-full py-2.5 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 text-[#3D56B2] dark:text-white text-xs font-semibold rounded-xl transition-all border border-gray-200 dark:border-gray-600 flex items-center justify-center gap-1.5 mt-2 shadow-sm">
+                <i data-lucide="bookmark" id="bookmark-icon" class="w-4 h-4"></i>
+                <span id="bookmark-text">Bookmark Event</span>
+              </button>
+            </div>
+
+            <!-- Organizer Actions -->
+            <div id="organizer-actions-block" class="hidden space-y-4">
+              <h3 class="font-bold text-sm text-[#1A1A1A] dark:text-white flex items-center gap-1"><i data-lucide="user-check" class="text-[#3D56B2] w-4 h-4"></i> Presenter Console</h3>
+              <div id="checkin-status-box" class="hidden p-3 rounded-xl border"></div>
+              <form onsubmit="handleCheckin(event)" class="space-y-3">
+                <p class="text-[#757575]">Enter student ticket code to log check-in:</p>
+                <input type="text" id="scan-ticket-input" required placeholder="e.g. TKT-BYTE890" class="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-[#3D56B2] focus:outline-none dark:text-white">
+                <button type="submit" id="scan-submit-btn" class="w-full py-2.5 bg-[#3D56B2] hover:bg-[#2C3E8A] text-white text-xs font-semibold rounded-xl shadow flex items-center justify-center gap-1">Mark Present</button>
+              </form>
+            </div>
+
+            <!-- Unauthenticated -->
+            <div id="unauth-actions-block" class="hidden space-y-3">
+              <h3 class="font-bold text-sm text-[#1A1A1A]">Registration Locked</h3>
+              <p class="text-[#757575]">Sign in with your student profile to register and receive a digital ticket.</p>
+              <button onclick="window.location.href='/login'" class="w-full py-2 bg-[#3D56B2] text-white font-semibold rounded-lg hover:bg-[#2C3E8A]">Sign In</button>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/event.js"></script>
+</body>
+</html>
