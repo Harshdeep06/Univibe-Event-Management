@@ -1,4 +1,6 @@
-# UNIVIBE – Event Management System(MAJOR PROJECT)
+# UNIVIBE – University Event Management System
+
+🌐 **Live Demo**: [https://univibe-event-management.onrender.com](https://univibe-event-management.onrender.com)
 
 ## 🚀 How to Run
 
