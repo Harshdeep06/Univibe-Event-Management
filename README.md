@@ -1,4 +1,4 @@
-# UNIVIBE – University Event Management System
+# UNIVIBE – Event Management System(MAJOR PROJECT)
 
 ## 🚀 How to Run
 
