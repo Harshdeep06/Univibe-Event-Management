@@ -1,5 +1,4 @@
-// Central API helper – all fetch calls go through here
-const API_BASE = 'http://localhost:5050/api';
+const API_BASE = window.location.origin + '/api';
 
 async function fetchAPI(endpoint, opts = {}) {
   const token = localStorage.getItem('univibe_token');

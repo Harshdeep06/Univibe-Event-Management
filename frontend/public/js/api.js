@@ -1,4 +1,6 @@
-const API_BASE = 'http://localhost:5050/api';
+const API_BASE = window.location.origin.includes('localhost')
+  ? 'http://localhost:5050/api'
+  : 'https://univibe-event-management.onrender.com/api';
 async function fetchAPI(endpoint, opts = {}) {
   const token = localStorage.getItem('univibe_token');
   const res = await fetch(`${API_BASE}${endpoint}`, {
